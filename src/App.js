@@ -6,8 +6,9 @@ import Sidebar from "./components/Sidebar";
 import Month from "./components/Month";
 import GlobalContext from "./context/GlobalContext";
 import EventModal from "./components/EventModal";
+
 function App() {
-  const [currenMonth, setCurrentMonth] = useState(getMonth());
+  const [currentMonth, setCurrentMonth] = useState(getMonth());
   const { monthIndex, showEventModal } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -15,17 +16,14 @@ function App() {
   }, [monthIndex]);
 
   return (
-    <React.Fragment>
+    <div className="h-screen flex flex-col dark:bg-gray-900">
       {showEventModal && <EventModal />}
-
-      <div className="h-screen flex flex-col">
-        <CalendarHeader />
-        <div className="flex flex-1">
-          <Sidebar />
-          <Month month={currenMonth} />
-        </div>
+      <CalendarHeader />
+      <div className="flex flex-1 flex-col md:flex-row overflow-auto">
+        <Sidebar />
+        <Month month={currentMonth} />
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 

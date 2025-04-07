@@ -6,7 +6,7 @@ export default function Labels() {
 
   return (
     <div className="mt-6 sm:mt-8">
-      <p className="text-sm sm:text-base text-gray-500 font-semibold mb-4">Labels</p>
+      <p className="text-sm sm:text-base text-gray-500 font-semibold mb-4">Filter by Colors</p>
       <div className="space-y-2 sm:space-y-3">
         {labels.map(({ label: lbl, checked }, idx) => (
           <label
