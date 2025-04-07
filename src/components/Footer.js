@@ -29,7 +29,7 @@ export default function Footer() {
             href="#"
             className="text-white hover:bg-white hover:text-black px-2 py-1 rounded transition text-sm"
           >
-            Privacy Policy
+            Need help?
           </a>
           <a
             href="#"
