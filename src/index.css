@@ -118,3 +118,27 @@
     @apply bg-background text-foreground;
   }
 }
+/* Additional styles for your calendar header */
+.calendar-container {
+  @apply max-w-6xl mx-auto mt-6 mb-10;
+}
+
+/* Custom transition for month changes */
+.month-transition {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Hover effect for the calendar buttons */
+.calendar-btn:hover {
+  @apply bg-gray-100 text-gray-900;
+}
+
+/* Active state for current day */
+.current-day {
+  @apply bg-primary/10 font-bold text-primary;
+}
+
+/* Optional dark mode support */
+.dark .current-day {
+  @apply bg-primary/20 text-primary-foreground;
+}
