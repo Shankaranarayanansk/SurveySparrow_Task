@@ -55,42 +55,42 @@ export default function SmallCalendar() {
     const curr = day.format(format);
     const selected = daySelected && daySelected.format(format);
 
-    if (curr === now) return "bg-blue-600 text-white font-semibold rounded-full";
-    if (curr === selected) return "bg-blue-100 text-blue-700 font-semibold rounded-full";
-    return "";
+    if (curr === now) return "bg-blue-600 text-white font-semibold";
+    if (curr === selected) return "bg-blue-100 text-blue-700 font-semibold";
+    return "text-gray-800 dark:text-gray-200";
   }
 
   return (
-    <div className="mt-10 text-sm">
-      <header className="flex justify-between items-center mb-3">
-        <div className="flex items-center gap-1">
-          <button onClick={handlePrevYear} className="text-gray-500 hover:text-gray-700 transition">
+    <div className="mt-4 text-sm w-full">
+      <header className="flex justify-between items-center mb-4">
+        <div className="flex gap-1">
+          <button onClick={handlePrevYear} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-200">
             <span className="material-icons text-base">keyboard_double_arrow_left</span>
           </button>
-          <button onClick={handlePrevMonth} className="text-gray-500 hover:text-gray-700 transition">
+          <button onClick={handlePrevMonth} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-200">
             <span className="material-icons text-base">chevron_left</span>
           </button>
         </div>
-        <p className="text-gray-800 font-semibold text-base">
+        <p className="text-gray-800 dark:text-white font-semibold">
           {dayjs(new Date(currentYear, currentMonthIdx)).format("MMMM YYYY")}
         </p>
-        <div className="flex items-center gap-1">
-          <button onClick={handleNextMonth} className="text-gray-500 hover:text-gray-700 transition">
+        <div className="flex gap-1">
+          <button onClick={handleNextMonth} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-200">
             <span className="material-icons text-base">chevron_right</span>
           </button>
-          <button onClick={handleNextYear} className="text-gray-500 hover:text-gray-700 transition">
+          <button onClick={handleNextYear} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-200">
             <span className="material-icons text-base">keyboard_double_arrow_right</span>
           </button>
         </div>
       </header>
 
-      <div className="grid grid-cols-7 text-center font-medium text-gray-500 mb-2">
+      <div className="grid grid-cols-7 text-center text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
         {currentMonth[0].map((day, i) => (
           <div key={i}>{day.format("dd").charAt(0)}</div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 text-center gap-y-1">
+      <div className="grid grid-cols-7 gap-y-1">
         {currentMonth.map((row, i) => (
           <React.Fragment key={i}>
             {row.map((day, idx) => (
@@ -100,7 +100,7 @@ export default function SmallCalendar() {
                   setSmallCalendarMonth(currentMonthIdx);
                   setDaySelected(day);
                 }}
-                className={`py-1 w-full transition-all duration-150 ease-in-out hover:bg-gray-200 rounded-full ${getDayClass(day)}`}
+                className={`h-8 w-8 mx-auto rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center ${getDayClass(day)}`}
               >
                 {day.format("D")}
               </button>
