@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
+import { MdClose, MdDelete, MdDragHandle, MdSchedule, MdSegment, MdBookmarkBorder, MdCheck } from "react-icons/md";
 import GlobalContext from "../context/GlobalContext";
+import Swal from "sweetalert2"; // Import SweetAlert
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
@@ -30,35 +32,60 @@ export default function EventModal() {
       day: daySelected.valueOf(),
       id: selectedEvent ? selectedEvent.id : Date.now(),
     };
+    
     if (selectedEvent) {
       dispatchCalEvent({ type: "update", payload: calendarEvent });
+      // Show update confirmation
+      Swal.fire({
+        icon: 'success',
+        title: 'Event Updated',
+        text: `"${title}" has been updated successfully!`,
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false
+      });
     } else {
       dispatchCalEvent({ type: "push", payload: calendarEvent });
+      // Show creation confirmation
+      Swal.fire({
+        icon: 'success',
+        title: 'Event Created',
+        text: `"${title}" has been added to your calendar!`,
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false
+      });
     }
+    
     setShowEventModal(false);
   }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 px-2 sm:px-4">
       <form className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-lg overflow-hidden">
-        <header className="bg-gray-100 px-4 sm:px-5 py-3 flex justify-between items-center">
-          <span className="material-icons-outlined text-gray-400 text-sm sm:text-base">drag_handle</span>
+        <header className="bg-gradient-to-r from-indigo-500 to-blue-500 px-4 sm:px-5 py-3 flex justify-between items-center">
+          <MdDragHandle className="text-white text-lg sm:text-xl" />
           <div className="flex gap-3 sm:gap-4 items-center">
             {selectedEvent && (
-              <span
+              <MdDelete
                 onClick={() => {
                   dispatchCalEvent({ type: "delete", payload: selectedEvent });
                   setShowEventModal(false);
+                  // Show delete confirmation
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Event Deleted',
+                    text: 'The event has been removed from your calendar',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                  });
                 }}
-                className="material-icons-outlined text-red-400 cursor-pointer hover:text-red-600 transition text-base"
-              >
-                delete
-              </span>
+                className="text-red-200 hover:text-white cursor-pointer text-lg transition"
+              />
             )}
             <button type="button" onClick={() => setShowEventModal(false)}>
-              <span className="material-icons-outlined text-gray-500 hover:text-gray-700 transition text-base">
-                close
-              </span>
+              <MdClose className="text-white hover:text-gray-200 transition text-lg" />
             </button>
           </div>
         </header>
@@ -70,41 +97,39 @@ export default function EventModal() {
             placeholder="Add title"
             value={title}
             required
-            className="w-full text-lg sm:text-xl font-semibold text-gray-800 border-b-2 border-gray-200 focus:outline-none focus:border-blue-500 placeholder-gray-400 pb-1 sm:pb-2"
+            className="w-full text-lg sm:text-xl font-semibold text-gray-800 border-b-2 border-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 pb-1 sm:pb-2"
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <div className="flex items-center gap-2 sm:gap-3 text-gray-500">
-            <span className="material-icons-outlined text-base sm:text-lg">schedule</span>
+          <div className="flex items-center gap-2 sm:gap-3 text-gray-600">
+            <MdSchedule className="text-base sm:text-lg" />
             <p className="text-xs sm:text-sm">{daySelected.format("dddd, MMMM DD")}</p>
           </div>
 
           <div className="flex items-start gap-2 sm:gap-3">
-            <span className="material-icons-outlined text-gray-400 pt-1 sm:pt-2 text-base">segment</span>
+            <MdSegment className="text-gray-400 pt-1 sm:pt-2 text-base" />
             <textarea
               name="description"
               rows="3"
               placeholder="Add a description"
               value={description}
               required
-              className="w-full border-b-2 border-gray-200 focus:outline-none focus:border-blue-500 text-gray-700 placeholder-gray-400 text-sm sm:text-base resize-none"
+              className="w-full border-b-2 border-gray-200 focus:outline-none focus:border-indigo-500 text-gray-700 placeholder-gray-400 text-sm sm:text-base resize-none"
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="material-icons-outlined text-gray-400 text-base">bookmark_border</span>
+            <MdBookmarkBorder className="text-gray-500 text-base" />
             <div className="flex gap-2 sm:gap-3">
               {labelsClasses.map((lblClass, i) => (
                 <span
                   key={i}
                   onClick={() => setSelectedLabel(lblClass)}
-                  className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-${lblClass}-500 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-1 hover:ring-${lblClass}-300 transition`}
+                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-${lblClass}-500 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-1 hover:ring-${lblClass}-300 transition`}
                 >
                   {selectedLabel === lblClass && (
-                    <span className="material-icons-outlined text-white text-[12px] sm:text-sm">
-                      check
-                    </span>
+                    <MdCheck className="text-white text-xs sm:text-sm" />
                   )}
                 </span>
               ))}
@@ -116,7 +141,7 @@ export default function EventModal() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 sm:px-6 py-2 rounded-full font-medium transition text-sm sm:text-base"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 sm:px-6 py-2 rounded-full font-medium transition text-sm sm:text-base"
           >
             Save
           </button>
