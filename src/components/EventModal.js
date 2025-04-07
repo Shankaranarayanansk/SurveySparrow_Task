@@ -1,9 +1,25 @@
+// EventModal.js
 import React, { useContext, useState } from "react";
-import { MdClose, MdDelete, MdDragHandle, MdSchedule, MdSegment, MdBookmarkBorder, MdCheck } from "react-icons/md";
+import {
+  MdClose,
+  MdDelete,
+  MdDragHandle,
+  MdSchedule,
+  MdSegment,
+  MdBookmarkBorder,
+  MdCheck,
+} from "react-icons/md";
 import GlobalContext from "../context/GlobalContext";
-import Swal from "sweetalert2"; // Import SweetAlert
+import Swal from "sweetalert2";
 
-const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
+const labelOptions = [
+  { name: "Company", color: "indigo" },
+  { name: "Friends", color: "gray" },
+  { name: "Work", color: "green" },
+  { name: "Family", color: "blue" },
+  { name: "Urgent", color: "red" },
+  { name: "Personal", color: "purple" },
+];
 
 export default function EventModal() {
   const {
@@ -18,9 +34,7 @@ export default function EventModal() {
     selectedEvent ? selectedEvent.description : ""
   );
   const [selectedLabel, setSelectedLabel] = useState(
-    selectedEvent
-      ? labelsClasses.find((lbl) => lbl === selectedEvent.label)
-      : labelsClasses[0]
+    selectedEvent ? selectedEvent.label : labelOptions[0].color
   );
 
   function handleSubmit(e) {
@@ -32,31 +46,29 @@ export default function EventModal() {
       day: daySelected.valueOf(),
       id: selectedEvent ? selectedEvent.id : Date.now(),
     };
-    
+
     if (selectedEvent) {
       dispatchCalEvent({ type: "update", payload: calendarEvent });
-      // Show update confirmation
       Swal.fire({
-        icon: 'success',
-        title: 'Event Updated',
+        icon: "success",
+        title: "Event Updated",
         text: `"${title}" has been updated successfully!`,
         timer: 2000,
         timerProgressBar: true,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     } else {
       dispatchCalEvent({ type: "push", payload: calendarEvent });
-      // Show creation confirmation
       Swal.fire({
-        icon: 'success',
-        title: 'Event Created',
+        icon: "success",
+        title: "Event Created",
         text: `"${title}" has been added to your calendar!`,
         timer: 2000,
         timerProgressBar: true,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     }
-    
+
     setShowEventModal(false);
   }
 
@@ -71,14 +83,13 @@ export default function EventModal() {
                 onClick={() => {
                   dispatchCalEvent({ type: "delete", payload: selectedEvent });
                   setShowEventModal(false);
-                  // Show delete confirmation
                   Swal.fire({
-                    icon: 'info',
-                    title: 'Event Deleted',
-                    text: 'The event has been removed from your calendar',
+                    icon: "info",
+                    title: "Event Deleted",
+                    text: "The event has been removed from your calendar",
                     timer: 2000,
                     timerProgressBar: true,
-                    showConfirmButton: false
+                    showConfirmButton: false,
                   });
                 }}
                 className="text-red-200 hover:text-white cursor-pointer text-lg transition"
@@ -103,7 +114,9 @@ export default function EventModal() {
 
           <div className="flex items-center gap-2 sm:gap-3 text-gray-600">
             <MdSchedule className="text-base sm:text-lg" />
-            <p className="text-xs sm:text-sm">{daySelected.format("dddd, MMMM DD")}</p>
+            <p className="text-xs sm:text-sm">
+              {daySelected.format("dddd, MMMM DD")}
+            </p>
           </div>
 
           <div className="flex items-start gap-2 sm:gap-3">
@@ -119,16 +132,28 @@ export default function EventModal() {
             />
           </div>
 
+          <div className="text-xs sm:text-sm text-gray-500 mb-1 font-medium">
+            <p className="mb-1">Label Color Reference:</p>
+            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-1">
+              {labelOptions.map((lbl, i) => (
+                <li key={i}>
+                  <span className={`inline-block w-3 h-3 bg-${lbl.color}-500 rounded-full mr-2`}></span>
+                  {lbl.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className="flex items-center gap-2 sm:gap-3">
             <MdBookmarkBorder className="text-gray-500 text-base" />
             <div className="flex gap-2 sm:gap-3">
-              {labelsClasses.map((lblClass, i) => (
+              {labelOptions.map((lbl, i) => (
                 <span
                   key={i}
-                  onClick={() => setSelectedLabel(lblClass)}
-                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-${lblClass}-500 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-1 hover:ring-${lblClass}-300 transition`}
+                  onClick={() => setSelectedLabel(lbl.color)}
+                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-${lbl.color}-500 cursor-pointer flex items-center justify-center hover:ring-2 hover:ring-offset-1 hover:ring-${lbl.color}-300 transition`}
                 >
-                  {selectedLabel === lblClass && (
+                  {selectedLabel === lbl.color && (
                     <MdCheck className="text-white text-xs sm:text-sm" />
                   )}
                 </span>

@@ -1,3 +1,4 @@
+// Day.js
 import dayjs from "dayjs";
 import React, { useContext, useState, useEffect } from "react";
 import GlobalContext from "../context/GlobalContext";
@@ -24,8 +25,16 @@ export default function Day({ day, rowIdx }) {
       : "text-gray-700";
   }
 
+  const handleDoubleClick = () => {
+    setDaySelected(day);
+    setShowEventModal(true);
+  };
+
   return (
-    <div className="border border-gray-200 flex flex-col hover:bg-gray-50 transition duration-200 ease-in-out px-1 py-1 sm:px-2 sm:py-2 rounded-md min-h-[100px]">
+    <div
+      className="border border-gray-200 flex flex-col hover:bg-gray-50 transition duration-200 ease-in-out px-1 py-1 sm:px-2 sm:py-2 rounded-md min-h-[100px]"
+      onDoubleClick={handleDoubleClick}
+    >
       <header className="flex flex-col items-center mb-1">
         {rowIdx === 0 && (
           <p className="text-[10px] sm:text-xs font-medium text-gray-500 mt-1">
@@ -37,23 +46,17 @@ export default function Day({ day, rowIdx }) {
         </p>
       </header>
 
-      <div
-        className="flex-1 cursor-pointer overflow-hidden"
-        onClick={() => {
-          setDaySelected(day);
-          setShowEventModal(true);
-        }}
-      >
+      <div className="flex-1 overflow-hidden">
         {dayEvents.map((evt, idx) => (
           <div
             key={idx}
             onClick={(e) => {
               e.stopPropagation();
               setSelectedEvent(evt);
+              setShowEventModal(true);
             }}
             className={`px-1 py-0.5 sm:px-2 sm:py-1 mb-1 rounded-md text-[10px] sm:text-sm text-gray-700 font-medium truncate cursor-pointer transition-all duration-200
-            bg-opacity-20 hover:bg-opacity-40 
-            ${getEventBgColor(evt.label)}`}
+            bg-opacity-20 hover:bg-opacity-40 ${getEventBgColor(evt.label)}`}
           >
             {evt.title}
           </div>
@@ -71,6 +74,8 @@ function getEventBgColor(label) {
     yellow: "bg-yellow-400 text-yellow-800",
     purple: "bg-purple-400 text-purple-800",
     pink: "bg-pink-400 text-pink-800",
+    indigo: "bg-indigo-400 text-indigo-800",
+    gray: "bg-gray-400 text-gray-800",
   };
   return colorMap[label] || "bg-gray-300 text-gray-800";
 }
