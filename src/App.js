@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import Month from "./components/Month";
 import GlobalContext from "./context/GlobalContext";
 import EventModal from "./components/EventModal";
+import Footer from "./components/Footer"; 
 
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
@@ -23,6 +24,7 @@ function App() {
         <Sidebar />
         <Month month={currentMonth} />
       </div>
+      <Footer /> 
     </div>
   );
 }
